@@ -1,5 +1,6 @@
 # OS specific files and folders
 .DS_Store
+.vscode
 
 # Java specific files and folders
 bin
