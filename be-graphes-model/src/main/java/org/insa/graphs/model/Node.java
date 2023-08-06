@@ -30,7 +30,7 @@ public final class Node implements Comparable<Node> {
      * <p>
      * If {@code roadInformation.isOneWay()} is {@code true}, only a forward arc is
      * created (origin to destination) and added to origin. Otherwise, a
-     * corresponding backward arc is created and add to destination.
+     * corresponding backward arc is created and added to destination.
      * </p>
      * 
      * @param origin Origin of the arc.
