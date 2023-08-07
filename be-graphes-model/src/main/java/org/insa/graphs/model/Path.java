@@ -34,14 +34,12 @@ public class Path {
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
 
-        // TODO:
         // return the fastest route going through the given nodes
         // return an error if two consecutives nodes are not connected in the graph
-        // return an error if the list of nodes is empty
 
         // if the list of nodes is empty
         if (nodes.isEmpty()) {
-            throw new IllegalArgumentException("The list of nodes is empty");
+            return new Path(graph);
         }
 
         // if the list of nodes contains only one node
@@ -101,14 +99,12 @@ public class Path {
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
 
-        // TODO:
         // return the shortest route going through the given nodes
         // return an error if two consecutives nodes are not connected in the graph
-        // return an error if the list of nodes is empty
 
         // if the list of nodes is empty
         if (nodes.isEmpty()) {
-            throw new IllegalArgumentException("The list of nodes is empty");
+            return new Path(graph);
         }
 
         // if the list of nodes contains only one node
