@@ -137,16 +137,40 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 
     @Override
     public void remove(E x) throws ElementNotFoundException {
-        // Find x
-        for (int index = 0; index < this.currentSize; ++index) {
-            if (x.equals(this.array.get(index))) {
-                this.arraySet(index, this.array.get(--this.currentSize));
-                this.percolateUp(index);
-                this.percolateDown(index);
+        // // to remove the element, we first need to find it
+        // int index = this.array.indexOf(x);
+
+        // // if the element is not in the heap, throw an exception
+        // if (index == -1) {
+        //     throw new ElementNotFoundException(x);
+        // }
+
+        // // if the element is the last one, we just remove it
+        // if (index == this.currentSize - 1) {
+        //     this.array.remove(--this.currentSize);
+        // } else {
+        //     // otherwise, we replace it by the last element and percolate it down
+        //     this.arraySet(index, this.array.get(--this.currentSize));
+        //     this.percolateDown(index);
+        // }
+
+        // commented version does not throw exception (why ??), this one does
+        for (int i = 0; i < this.currentSize; i++) {
+            if (this.array.get(i).equals(x)) {
+                // if x is the last element, we just remove it
+                if (i == this.currentSize - 1) {
+                    this.array.remove(--this.currentSize);
+                } else {
+                    // otherwise, we replace it by the last element and percolate it down
+                    this.arraySet(i, this.array.get(--this.currentSize));
+                    this.percolateDown(i);
+                    this.percolateUp(i); // if I do not include this it is not working anymore, though I don't know why
+                }
                 return;
             }
         }
 
+        // if the element is not in the heap, throw an exception
         throw new ElementNotFoundException(x);
     }
 
