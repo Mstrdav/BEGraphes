@@ -42,6 +42,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         heap.insert(labels[data.getOrigin().getId()]);
         boolean done = false;
         Label currentLabel = null;
+        int countNode = 0;
 
         // Step 2 : find the shortest path
         while (!heap.isEmpty() && !done) {
@@ -51,6 +52,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             // We have reached the destination
             if (currentLabel.getCurrentNode() == data.getDestination()) {
                 done = true;
+                System.out.println("Destination reached !");
+                System.out.println("Visited " + countNode + " nodes");
             }
 
             // We look at all the successors of the current node
@@ -71,6 +74,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     // First time we reach the node
                     if (Double.isInfinite(oldCost) && Double.isFinite(newCost)) {
                         notifyNodeReached(arc.getDestination());
+                        countNode++;
                     }
 
                     // Better path found
