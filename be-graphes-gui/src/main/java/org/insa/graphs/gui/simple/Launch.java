@@ -9,9 +9,14 @@ import java.io.FileInputStream;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import org.insa.graphs.algorithm.ArcInspectorFactory;
+import org.insa.graphs.algorithm.shortestpath.DijkstraAlgorithm;
+import org.insa.graphs.algorithm.shortestpath.ShortestPathData;
+import org.insa.graphs.algorithm.shortestpath.ShortestPathSolution;
 import org.insa.graphs.gui.drawing.Drawing;
 import org.insa.graphs.gui.drawing.components.BasicDrawing;
 import org.insa.graphs.model.Graph;
+import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
 import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.BinaryPathReader;
@@ -47,34 +52,61 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // Visit these directory to see the list of available files on Commetud.
-        final String mapName = "maps/insa.mapgr";
-        final String pathName = "paths/path_fr31insa_rangueil_r2.path";
+        final String mapName = "/home/mstrdav/insa/BEGraphes/maps/insa.mapgr";
+        final String pathName = "/home/mstrdav/insa/BEGraphes/paths/path_fr31insa_rangueil_r2.path";
 
         // Create a graph reader.
         final GraphReader reader = new BinaryGraphReader(
                 new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
 
-        // TODO: Read the graph.
+        // Read the graph.
         final Graph graph = reader.read();
         System.out.println(graph);
 
         // Create the drawing:
         final Drawing drawing = createDrawing();
 
-        // TODO: Draw the graph on the drawing.
+        // Draw the graph on the drawing.
         drawing.drawGraph(graph);
 
-        // TODO: Create a PathReader.
+        // Create a PathReader.
         final PathReader pathReader = new BinaryPathReader(
             new DataInputStream(new BufferedInputStream(new FileInputStream(pathName)))
         );
 
-        // TODO: Read the path.
+        // Read the path.
         final Path path = pathReader.readPath(graph);
 
-        // TODO: Draw the path.
+        // Draw the path.
         drawing.drawPath(path);
 
+        /*
+         * Testing Dijkstra, using the provided path. Simply change the map and/or the path for other examples.
+         * If Dijkstra works, both paths should be the same.
+         * If it does not, everything explodes!!!
+         */
+
+        Node origin = graph.get(path.getOrigin().getId());
+        Node destination = graph.get(path.getDestination().getId());
+
+        // run Dijkstra
+        ShortestPathData data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
+        DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data);
+        ShortestPathSolution solution = dijkstra.run();
+        Path pathDijkstra = solution.getPath();
+
+        // draw the path
+        drawing.drawPath(pathDijkstra);
+
+        // Log the data of both paths
+        System.out.println("Path from " + path.getOrigin().getId() + " to " + path.getDestination().getId() + ":");
+        System.out.println("  - Length: " + path.getLength());
+        System.out.println("  - Time: " + path.getMinimumTravelTime());
+        System.out.println("  - Nb Arcs: " + path.getArcs().size());
+        System.out.println("Path from " + pathDijkstra.getOrigin().getId() + " to " + pathDijkstra.getDestination().getId() + ":");
+        System.out.println("  - Length: " + pathDijkstra.getLength());
+        System.out.println("  - Time: " + pathDijkstra.getMinimumTravelTime());
+        System.out.println("  - Nb Arcs: " + pathDijkstra.getArcs().size());
     }
 
 }
