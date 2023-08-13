@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.insa.graphs.algorithm.ArcInspectorFactory;
+import org.insa.graphs.algorithm.shortestpath.AStarAlgorithm;
 import org.insa.graphs.algorithm.shortestpath.DijkstraAlgorithm;
 import org.insa.graphs.algorithm.shortestpath.ShortestPathData;
 import org.insa.graphs.algorithm.shortestpath.ShortestPathSolution;
@@ -89,24 +90,37 @@ public class Launch {
         Node origin = graph.get(path.getOrigin().getId());
         Node destination = graph.get(path.getDestination().getId());
 
+        System.out.println("Path from " + path.getOrigin().getId() + " to " + path.getDestination().getId() + ":");
+        System.out.println("  - Length: " + path.getLength());
+        System.out.println("  - Time: " + path.getMinimumTravelTime());
+        System.out.println("  - Nb Arcs: " + path.getArcs().size());
+
         // run Dijkstra
+        System.out.println("Running Dijkstra...");
         ShortestPathData data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
         DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data);
         ShortestPathSolution solution = dijkstra.run();
         Path pathDijkstra = solution.getPath();
 
-        // draw the path
-        drawing.drawPath(pathDijkstra);
-
-        // Log the data of both paths
-        System.out.println("Path from " + path.getOrigin().getId() + " to " + path.getDestination().getId() + ":");
-        System.out.println("  - Length: " + path.getLength());
-        System.out.println("  - Time: " + path.getMinimumTravelTime());
-        System.out.println("  - Nb Arcs: " + path.getArcs().size());
         System.out.println("Path from " + pathDijkstra.getOrigin().getId() + " to " + pathDijkstra.getDestination().getId() + ":");
         System.out.println("  - Length: " + pathDijkstra.getLength());
         System.out.println("  - Time: " + pathDijkstra.getMinimumTravelTime());
         System.out.println("  - Nb Arcs: " + pathDijkstra.getArcs().size());
-    }
 
+        // run A*
+        System.out.println("Running A*...");
+        data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
+        AStarAlgorithm aStar = new AStarAlgorithm(data);
+        solution = aStar.run();
+        Path pathAStar = solution.getPath();
+
+        System.out.println("Path from " + pathAStar.getOrigin().getId() + " to " + pathAStar.getDestination().getId() + ":");
+        System.out.println("  - Length: " + pathAStar.getLength());
+        System.out.println("  - Time: " + pathAStar.getMinimumTravelTime());
+        System.out.println("  - Nb Arcs: " + pathAStar.getArcs().size());
+
+        // draw the path
+        drawing.drawPath(pathDijkstra);
+        drawing.drawPath(pathAStar);
+    }
 }
