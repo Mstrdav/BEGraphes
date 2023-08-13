@@ -89,8 +89,15 @@ public class Label implements Comparable<Label> {
         return this.achievedCost;
     }
 
+    /**
+     * @return Estimated cost of the cheapest path from this node to the destination.
+     */
+    public double getTotalCost() {
+        return this.achievedCost;
+    }
+
     @Override
     public int compareTo(Label o) {
-        return Double.compare(this.getCost(), o.getCost());
+        return Double.compare(this.getTotalCost(), o.getTotalCost());
     }
 }
