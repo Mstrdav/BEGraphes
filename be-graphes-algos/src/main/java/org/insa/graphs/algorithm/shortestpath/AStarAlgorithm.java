@@ -81,6 +81,11 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                     if (newCost < oldCost) {
                         successorLabel.setAchievedCost(newCost);
                         successorLabel.setFather(arc);
+
+                        // If the node is already in the heap, we remove it first
+                        if (!Double.isInfinite(oldCost)) {
+                            heap.remove(successorLabel);
+                        }
                         heap.insert(successorLabel);
                     }
                 }

@@ -83,6 +83,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     if (newCost < oldCost) {
                         successorLabel.setAchievedCost(newCost);
                         successorLabel.setFather(arc);
+
+                        // If the node is already in the heap, we have to remove it and add it again
+                        if (!Double.isInfinite(oldCost)) { // doing this because heap has no 'find' method
+                            heap.remove(successorLabel);
+                        }
                         heap.insert(successorLabel);
                     }
                 }
