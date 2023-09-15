@@ -47,6 +47,8 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         while (!heap.isEmpty() && !done) {
             currentLabel = heap.deleteMin();
             currentLabel.mark();
+            // Notify observers
+            notifyNodeMarked(currentLabel.getCurrentNode());
 
             // We have reached the destination
             if (currentLabel.getCurrentNode() == data.getDestination()) {
