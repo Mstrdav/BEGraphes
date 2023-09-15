@@ -10,9 +10,26 @@ import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Path;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
+    private Label[] labels;
 
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
+    }
+
+    protected Label[] initLabels(ShortestPathData data) {
+        final int nbNodes = data.getGraph().size();
+        Label[] labels = new Label[nbNodes];
+        for (int i = 0; i < nbNodes; i++) {
+            labels[i] = new Label(data.getGraph().get(i));
+            labels[i].setFather(null);
+            labels[i].setAchievedCost(Double.POSITIVE_INFINITY);
+
+            if (data.getGraph().get(i) == data.getOrigin()) {
+                labels[i].setAchievedCost(0);
+                labels[i].mark();
+            }
+        }
+        return labels;
     }
 
     @Override
@@ -20,23 +37,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         final ShortestPathData data = getInputData();
         Graph graph = data.getGraph();
 
-        final int nbNodes = graph.size();
-
         // Notify observers just like BellmanFord does it ;)
         notifyOriginProcessed(data.getOrigin());
 
         // Step 1 : initialisation
-        Label[] labels = new Label[nbNodes];
-        for (int i = 0; i < nbNodes; i++) {
-            labels[i] = new Label(graph.get(i));
-            labels[i].setFather(null);
-            labels[i].setAchievedCost(Double.POSITIVE_INFINITY);
-
-            if (graph.get(i) == data.getOrigin()) {
-                labels[i].setAchievedCost(0);
-                labels[i].mark();
-            }
-        }
+        labels = initLabels(data);
 
         BinaryHeap<Label> heap = new BinaryHeap<Label>();
         heap.insert(labels[data.getOrigin().getId()]);
